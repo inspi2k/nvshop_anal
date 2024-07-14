@@ -29,7 +29,7 @@ for i in range(len(mid_list)):
     # Unnamed: 0 컬럼 제거
     df.drop(['Unnamed: 0'], axis=1, inplace=True)
 
-    col_now = f'{datetime.now().strftime("%y%m%d%H%M%S")}'
+    col_now = f'{datetime.now().strftime("%y%m%d_%H%M%S")}'
     print(f'mid={mid_list[i]}', end='\t', flush=True)
     print(f'datetime={col_now}', end=' ', flush=True)
 
