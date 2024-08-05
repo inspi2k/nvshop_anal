@@ -74,6 +74,7 @@ for idx, row in df_rank.iterrows():
     # print('카탈로그(6/20/40)[1p]: {}/{}/{}'.format(cat6, cat20, cat40), flush=True)
 
     # 랭킹 구하기
+    print(' ', end='',flush=True)
     print(idx + 1, end='', flush=True)
     rank_api = nvapi.getNVRank(str(row['MID']), keyword)
     # print(':', end='', flush=True)
