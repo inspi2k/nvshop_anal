@@ -67,14 +67,14 @@ def getNVTotal(query):
 
     for item in result['items']:
         rank += 1
-        if item["mallName"] == "네이버":
+        if item['mallName'] == '네이버':
             catalog40 += 1
             if limit_catalog20 >= rank: 
                 catalog20 += 1
                 if limit_catalog6 >= rank: 
                     catalog6 += 1
-        cate_name = item["category1"] + ">" + item["category2"] + ">" + item["category3"]
-        if item["category4"] != "": cate_name = cate_name + ">" + item["category4"]
+        cate_name = item['category1'] + '>' + item['category2'] + '>' + item['category3']
+        if item['category4'] != '': cate_name = cate_name + '>' + item['category4']
         category.append(cate_name)
 
     # 카테고리 카운트
@@ -83,7 +83,7 @@ def getNVTotal(query):
     for i in range(len(category_set)):
         category_count[i] = category.count(category_set[i])
 
-    return [result["total"], catalog6, catalog20, catalog40, category_set, category_count] # result["total"]
+    return [result['total'], catalog6, catalog20, catalog40, category_set, category_count] # result['total']
 
 def getNVRank(mid, query, start=1):
     while start <= 1000:
@@ -91,7 +91,7 @@ def getNVRank(mid, query, start=1):
 
         result = callNvAPI(query, display=display, start=start)
         
-        # print("{}|".format(start),end="",flush=True)
+        # print('{}|'.format(start),end='',flush=True)
         if (start % 500) == 0:
             print('.', end='', flush=True)
         #     time.sleep(0.05)
@@ -110,7 +110,7 @@ def getNVRank(mid, query, start=1):
 
         start += display
 
-    return "."
+    return 9999999
 
 def getNVProduct(storename, keyword):
     query = storename + ' ' + keyword

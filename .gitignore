@@ -3,9 +3,11 @@
 *.xlsx
 
 # screts files
-mid_list.json
 secrets.json
 nvshop_headers.json
+mid_list.json
+python-*.json
+gsheet_info.json
 
 00_*
 01_*
