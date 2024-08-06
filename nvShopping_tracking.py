@@ -109,4 +109,5 @@ warnings.filterwarnings(action='ignore')
 ws_rank.update(f'A{row_last + 1}:F{row_last + len(df_rank)}', df_rank.values.tolist())
 warnings.filterwarnings(action='default')
 
+print()
 print(datetime.now().strftime("%y-%m-%d_%H:%M:%S"))
