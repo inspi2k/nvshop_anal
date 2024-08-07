@@ -22,7 +22,7 @@ import callGetKey as getkey
 # from tabulate import tabulate
 # tabulate.WIDE_CHARS_MODE = False
 
-print(datetime.now().strftime("%y-%m-%d_%H:%M:%S"))
+print(datetime.now().strftime(" %y-%m-%d_%H:%M:%S"))
 
 # secret info
 GS_JSON = getkey.get_apikey('GS_JSON', 'gsheet_info.json')
@@ -110,4 +110,4 @@ ws_rank.update(f'A{row_last + 1}:F{row_last + len(df_rank)}', df_rank.values.tol
 warnings.filterwarnings(action='default')
 
 print()
-print(datetime.now().strftime("%y-%m-%d_%H:%M:%S"))
+print(datetime.now().strftime(" %y-%m-%d_%H:%M:%S"))
