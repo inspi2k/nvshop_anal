@@ -57,6 +57,8 @@ df_rank.insert(0, 'TIME', [now_time for i in range(len(df_rank))])
 df_rank.insert(0, 'DATE', [now_date for i in range(len(df_rank))])
 df_rank['RANK'] = ''
 
+count = 0
+
 # 키워드별로 키워드 정보 및 상품 랭킹 구하기
 # for keyword in keyword_list:
 for idx, row in df_rank.iterrows():
@@ -75,7 +77,8 @@ for idx, row in df_rank.iterrows():
 
     # 랭킹 구하기
     print(' ', end='',flush=True)
-    print(idx + 1, end='', flush=True)
+    count += 1
+    print(count, end='', flush=True)
     rank_api = nvapi.getNVRank(str(row['MID']), keyword)
     # print(':', end='', flush=True)
     if rank_api == False:
@@ -91,7 +94,8 @@ for idx, row in df_rank.iterrows():
     #     else: print('[JSON] 랭킹: {0} ({1}p {2})'.format(format(rank_keyword,','), format(math.ceil(rank_keyword/40)), format(rank_keyword%40)))
     elif rank_api > 0:
         # print('[API] 랭킹: {0} ({1}p {2})'.format(format(rank_api,','), format(math.ceil(rank_api/40)), format((rank_api-1)%40+1)))
-        df_rank.loc[idx, 'RANK'] = format(int(rank_api), ',')
+        # df_rank.loc[idx, 'RANK'] = format(int(rank_api), ',')
+        df_rank.loc[idx, 'RANK'] = int(rank_api)
     else:
         # print(f'{row["MID"]} / {keyword} - System Check')
         print(f'{row["MID"]} / {keyword} - System Check')
