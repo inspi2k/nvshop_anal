@@ -39,7 +39,11 @@ df = pd.DataFrame(ws_keywords.get_all_records(), columns=['MID', 'KEYWORD', 'TRA
 # header 삭제
 # df.drop(df.index[0], axis='index', inplace=True)
 # MID 섞여있을지 모르니 정렬
-df.sort_values('MID', ascending=True)
+try:
+    df.sort_values('MID', ascending=True)
+# MID 비어있으면 예외처리
+except:
+    print('MID - Blank Check')
 
 # 중복 제거 후 인덱스 재설정 - https://mizykk.tistory.com/93
 # mids = df.drop_duplicates(subset=['MID'], ignore_index=True)
@@ -62,6 +66,10 @@ count = 0
 # 키워드별로 키워드 정보 및 상품 랭킹 구하기
 # for keyword in keyword_list:
 for idx, row in df_rank.iterrows():
+
+    if(row['MID'] == ''): 
+        print('\nMID is null - ', row['KEYWORD'], end='', flush=True)
+        continue
 
     keyword = row['KEYWORD'].strip()
 
