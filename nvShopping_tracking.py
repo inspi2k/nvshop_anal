@@ -95,9 +95,10 @@ for idx, row in df_rank.iterrows():
         print(f'{row["MID"]} / {keyword} - No Result in API call')
     elif rank_api == 0:
         print(f'{row["MID"]} / {keyword} - No Data in API Result')
-    elif rank_api == '.':
+    elif rank_api == 9999999:
+        df_rank.loc[idx, 'RANK'] = 1201
         print(',', end='', flush=True)
-    #     rank_keyword = nvjson.getNVRank(row['MID'], keyword, 18)
+    #     rank_keyword = nvjson.getNVRank(row['MID'], keyword, 29)
     #     if (rank_keyword == -1): print('[JSON] Not within top 100p')
     #     else: print('[JSON] 랭킹: {0} ({1}p {2})'.format(format(rank_keyword,','), format(math.ceil(rank_keyword/40)), format(rank_keyword%40)))
     elif rank_api > 0:
