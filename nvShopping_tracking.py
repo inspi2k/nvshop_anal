@@ -35,7 +35,7 @@ gc = gspread.service_account(filename=f'./{GS_JSON}')
 doc = gc.open_by_url(GS_URL)
 ws_keywords = doc.worksheet(GSHEET_KEYWORDS)
 
-df = pd.DataFrame(ws_keywords.get_all_records(), columns=['MID', 'KEYWORD', 'TRACKING', 'REMARK'])
+df = pd.DataFrame(ws_keywords.get_all_records(), columns=['MID', 'KEYWORD', 'TRACKING', 'STORE', 'ITEM'])
 # header 삭제
 # df.drop(df.index[0], axis='index', inplace=True)
 # MID 섞여있을지 모르니 정렬
@@ -49,8 +49,9 @@ except:
 # mids = df.drop_duplicates(subset=['MID'], ignore_index=True)
 # mid_list = mids['MID']
 
-now_date = f'{datetime.now().strftime("%y. %m. %d")}'
-now_time = f'{datetime.now().strftime("%H:%M:%S")}'
+now = datetime.now()
+now_date = f'{now.strftime("%y. %m. %d")}'
+now_time = f'{now.strftime("%H:%M:%S")}'
 
 # rank dataframe 생성
 df_rank = df[df['TRACKING'] == 1].copy()
@@ -60,6 +61,9 @@ df_rank.drop(['TRACKING'], axis='columns', inplace=True)
 df_rank.insert(0, 'TIME', [now_time for i in range(len(df_rank))])
 df_rank.insert(0, 'DATE', [now_date for i in range(len(df_rank))])
 df_rank['RANK'] = ''
+df_rank['CHANNEL'] = 'nsAPI'
+df_rank['AMT_SEARCH'] = ''
+df_rank['AMT_PRDS'] = ''
 
 count = 0
 
@@ -77,11 +81,13 @@ for idx, row in df_rank.iterrows():
     # print('검색어: {:<8}'.format(keyword), end='\t', flush=True)
     amount_search = nvad.getTotalQcCnt(keyword) # 월간 총 검색수 구하기
     # print('총 검색수: {:<8}'.format(format(int(amount_search), ',')), end='\t', flush=True)
+    df_rank.loc[idx, 'AMT_SEARCH'] = int(amount_search)
 
     # 상품량 구하기
     [amount_total, cat6, cat20, cat40, cate_name, cate_count]  = nvapi.getNVTotal(keyword)
     # print('\n  상품량: {:<15}'.format(format(int(amount_total), ',')), end='\t', flush=True)
     # print('카탈로그(6/20/40)[1p]: {}/{}/{}'.format(cat6, cat20, cat40), flush=True)
+    df_rank.loc[idx, 'AMT_PRDS'] = amount_total
 
     # 랭킹 구하기
     print(' ', end='',flush=True)
@@ -96,7 +102,8 @@ for idx, row in df_rank.iterrows():
     elif rank_api == 0:
         print(f'{row["MID"]} / {keyword} - No Data in API Result')
     elif rank_api == 9999999:
-        df_rank.loc[idx, 'RANK'] = 1201
+        # df_rank.loc[idx, 'RANK'] = 1201
+        # df_rank.drop(idx, axis=0, inplace=True) # 행삭제
         print(',', end='', flush=True)
     #     rank_keyword = nvjson.getNVRank(row['MID'], keyword, 29)
     #     if (rank_keyword == -1): print('[JSON] Not within top 100p')
@@ -119,7 +126,7 @@ row_last = len(ws_rank.col_values(1))
 
 # gspread 로 기록
 warnings.filterwarnings(action='ignore')
-ws_rank.update(f'A{row_last + 1}:F{row_last + len(df_rank)}', df_rank.values.tolist())
+ws_rank.update(f'A{row_last + 1}:J{row_last + len(df_rank)}', df_rank.values.tolist())
 warnings.filterwarnings(action='default')
 
 print()
