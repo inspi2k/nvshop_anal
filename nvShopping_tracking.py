@@ -64,6 +64,7 @@ df_rank['RANK'] = ''
 df_rank['CHANNEL'] = 'nsAPI'
 df_rank['AMT_SEARCH'] = ''
 df_rank['AMT_PRDS'] = ''
+df_rank['NAME_PRD'] = ''
 
 count = 0
 
@@ -93,7 +94,7 @@ for idx, row in df_rank.iterrows():
     print(' ', end='',flush=True)
     count += 1
     print(count, end='', flush=True)
-    rank_api = nvapi.getNVRank(str(row['MID']), keyword)
+    [rank_api, title_api] = nvapi.getNVRankInfo(str(row['MID']), keyword)
     # print(':', end='', flush=True)
     if rank_api == False:
         print(f'{row["MID"]} / {keyword} - Error in API call')
@@ -112,6 +113,7 @@ for idx, row in df_rank.iterrows():
         # print('[API] 랭킹: {0} ({1}p {2})'.format(format(rank_api,','), format(math.ceil(rank_api/40)), format((rank_api-1)%40+1)))
         # df_rank.loc[idx, 'RANK'] = format(int(rank_api), ',')
         df_rank.loc[idx, 'RANK'] = int(rank_api)
+        df_rank.loc[idx, 'NAME_PRD'] = title_api
     else:
         # print(f'{row["MID"]} / {keyword} - System Check')
         print(f'{row["MID"]} / {keyword} - System Check')
@@ -126,7 +128,7 @@ row_last = len(ws_rank.col_values(1))
 
 # gspread 로 기록
 warnings.filterwarnings(action='ignore')
-ws_rank.update(f'A{row_last + 1}:J{row_last + len(df_rank)}', df_rank.values.tolist())
+ws_rank.update(f'A{row_last + 1}:K{row_last + len(df_rank)}', df_rank.values.tolist())
 warnings.filterwarnings(action='default')
 
 print()

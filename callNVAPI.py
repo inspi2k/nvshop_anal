@@ -112,6 +112,33 @@ def getNVRank(mid, query, start=1):
 
     return 9999999
 
+def getNVRankInfo(mid, query, start=1):
+    while start <= 1000:
+        display = 99 if start == 1 else 100
+
+        result = callNvAPI(query, display=display, start=start)
+        
+        # print('{}|'.format(start),end='',flush=True)
+        if (start % 500) == 0:
+            print('.', end='', flush=True)
+        #     time.sleep(0.05)
+        
+        if result == False: return False
+        elif result == -1: return -1
+        elif result == 0: return 0
+        else:
+            rank = start
+            for item in result['items']:
+                if mid == item['productId']: 
+                    # item.update({'rank':rank})
+                    # return item
+                    return [rank, re.sub(re.compile('<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});'), '', item['title'])]
+                rank += 1
+
+        start += display
+
+    return [9999999, '']
+
 def getNVProduct(storename, keyword):
     query = storename + ' ' + keyword
     result = callNvAPI(query, sort='date')
