@@ -62,9 +62,9 @@ df_rank.insert(0, 'TIME', [now_time for i in range(len(df_rank))])
 df_rank.insert(0, 'DATE', [now_date for i in range(len(df_rank))])
 df_rank['RANK'] = ''
 df_rank['CHANNEL'] = 'nsAPI'
+df_rank['NAME_PRD'] = ''
 df_rank['AMT_SEARCH'] = ''
 df_rank['AMT_PRDS'] = ''
-df_rank['NAME_PRD'] = ''
 
 count = 0
 
