@@ -104,7 +104,7 @@ for idx, row in df_rank.iterrows():
         print(f'{row["MID"]} / {keyword} - No Data in API Result')
     elif rank_api == 9999999:
         # df_rank.loc[idx, 'RANK'] = 1201
-        # df_rank.drop(idx, axis=0, inplace=True) # 행삭제
+        df_rank.drop(idx, axis=0, inplace=True) # 행삭제
         print(',', end='', flush=True)
     #     rank_keyword = nvjson.getNVRank(row['MID'], keyword, 29)
     #     if (rank_keyword == -1): print('[JSON] Not within top 100p')
