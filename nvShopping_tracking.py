@@ -93,7 +93,15 @@ for idx, row in df_rank.iterrows():
     # 랭킹 구하기
     print(' ', end='',flush=True)
     count += 1
-    print(count, end='', flush=True)
+    print(count, end='', flush=True)        #print('', flush=True)
+
+    # 1초에 10회 호출 제한 https://developers.naver.com/notice/article/7692
+    if count % 50 == 0:  # 50의 배수일 때 대기
+        for i in range(10):  # 1초 동안 대기
+            print('+' if i % 2 == 0 else '*', end='', flush=True)  # +와 * 반복
+            time.sleep(0.1)  # 0.1초 대기
+
+    # rank_api = nvapi.getNVRank(str(row['MID']), keyword)
     [rank_api, title_api] = nvapi.getNVRankInfo(str(row['MID']), keyword)
     # print(':', end='', flush=True)
     if rank_api == False:
