@@ -18,6 +18,7 @@ import warnings
 import callNVAPI as nvapi
 import callNVAd as nvad
 import callGetKey as getkey
+import time
 
 # from tabulate import tabulate
 # tabulate.WIDE_CHARS_MODE = False
