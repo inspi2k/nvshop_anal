@@ -131,14 +131,32 @@ for idx, row in df_rank.iterrows():
         
     # print(datetime.now())
 
-# gspread 로 rank list 가져오기
-ws_rank = doc.worksheet(GSHEET_RANK_PRE)
-row_last = len(ws_rank.col_values(1))
+# df_rank를 MID별로 그룹화하여 각각 다른 시트에 기록
+for mid in df_rank['MID'].unique():
+    # 해당 MID의 데이터만 필터링
+    df_mid = df_rank[df_rank['MID'] == mid]
+    
+    # 시트 이름을 MID로 설정
+    sheet_name = f'{mid}'
+    
+    try:
+        # 해당 이름의 시트가 있는지 확인
+        ws_rank = doc.worksheet(sheet_name)
+    except gspread.exceptions.WorksheetNotFound:
+        # 없으면 새로 생성
+        ws_rank = doc.add_worksheet(sheet_name, 1000, 11)  # 1000행, 11열로 생성
+        headers = ['DATE', 'TIME', 'MID', 'KEYWORD', 'STORE', 'ITEM', 'RANK', 'CHANNEL', 'NAME_PRD', 'AMT_SEARCH', 'AMT_PRDS']
+        # 새로운 update 메서드 사용법
+        ws_rank.update(values=[headers], range_name='A1:K1')
 
-# gspread 로 기록
-warnings.filterwarnings(action='ignore')
-ws_rank.update(f'A{row_last + 1}:K{row_last + len(df_rank)}', df_rank.values.tolist())
-warnings.filterwarnings(action='default')
+    row_last = len(ws_rank.col_values(1))
+    
+    # 데이터 업데이트도 새로운 방식으로 변경
+    ws_rank.update(values=df_mid.values.tolist(), range_name=f'A{row_last + 1}:K{row_last + len(df_mid)}')
 
 print()
 print(datetime.now().strftime(" %y-%m-%d_%H:%M:%S"))
+
+# gspread의 deprecation 경고 무시
+warnings.filterwarnings('ignore', category=DeprecationWarning)
+warnings.filterwarnings('ignore', message='legacy_spreadsheet')
