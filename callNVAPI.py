@@ -96,9 +96,9 @@ def getNVRank(mid, query, start=1):
             print('.', end='', flush=True)
         #     time.sleep(0.05)
         
-        if result == False: return False
-        elif result == -1: return -1
-        elif result == 0: return 0
+        if result == False: return [False, '']
+        elif result == -1: return [-1, '']
+        elif result == 0: return [0, '']
         else:
             rank = start
             for item in result['items']:
@@ -118,15 +118,15 @@ def getNVRankInfo(mid, query, start=1):
 
         result = callNvAPI(query, display=display, start=start)
         
-        # print('{}|'.format(start),end='',flush=True)
-        if (start % 500) == 0:
-            print('.', end='', flush=True)
-        #     time.sleep(0.05)
-        
-        if result == False: return False
-        elif result == -1: return -1
-        elif result == 0: return 0
+        if result == False: return [False, '']
+        elif result == -1: return [-1, '']
+        elif result == 0: return [0, '']
         else:
+            # print('{}|'.format(start),end='',flush=True)
+            if (start % 500) == 0:
+                print('.', end='', flush=True)
+            #     time.sleep(0.05)
+            
             rank = start
             for item in result['items']:
                 if mid == item['productId']: 
